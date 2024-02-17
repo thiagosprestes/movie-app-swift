@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeScreen: View {
     @StateObject var viewModel = HomeViewModel()
     
-    var body: some View {
+    var defaultState: some View {
         ScrollView {
             HStack {
                 Spacer()
@@ -31,6 +31,21 @@ struct HomeScreen: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color("background"))
+    }
+    
+    var loadingState: some View {
+        ProgressView()
+    }
+    
+    var body: some View {
+        switch viewModel.state {
+        case .defaultState:
+            defaultState
+        case .loading:
+            loadingState
+        case .failed(error: let error):
+            loadingState
+        }
     }
 }
 

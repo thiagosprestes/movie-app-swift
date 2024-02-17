@@ -15,7 +15,6 @@ class HomeViewModel: ObservableObject {
     enum ScreenState {
         case defaultState
         case loading
-        case success
         case failed(error: Error)
     }
     
@@ -60,7 +59,7 @@ class HomeViewModel: ObservableObject {
                 self.topRated = topRatedResponse?.results ?? []
             }
             
-            self.state = .success
+            self.state = .defaultState
         }  catch {
             print(error)
             self.state = .failed(error: error)
