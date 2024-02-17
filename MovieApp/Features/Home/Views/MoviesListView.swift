@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct MoviesListView: View {
-    @State var url = URL(string: "https://img.r7.com/images/deadpool-no-filme-deadpool-wolverine-14022024073129447?dimensions=771x420")
-    
-    @EnvironmentObject var viewModel: HomeViewModel
+    @ObservedObject var viewModel: HomeViewModel
     
     var body: some View {
         VStack {
@@ -23,9 +21,9 @@ struct MoviesListView: View {
             .padding([.leading, .trailing], 16)
             ScrollView(.horizontal) {
                 HStack {
-                    ForEach(1...3, id: \.self) { item in
+                    ForEach(viewModel.newReleases, id: \.id) { item in
                         AsyncImage(
-                            url: url,
+                            url: URL(string: "https://image.tmdb.org/t/p/original\(item.poster_path)"),
                             content: { image in
                                 image.image?
                                     .resizable()
@@ -43,6 +41,25 @@ struct MoviesListView: View {
 
 struct MoviesListViewPreview: PreviewProvider {
     static var previews: some View {
-        MoviesListView().environmentObject(HomeViewModel())
+        MoviesListView(viewModel: HomeViewModel(
+            provider: nil,
+            newReleases: [
+                Movie(
+                    adult: false,
+                    backdrop_path: "/zVMyvNowgbsBAL6O6esWfRpAcOb.jpg",
+                    genre_ids: [10], id: 18272,
+                    original_language: "en-US",
+                    original_title: "The marvels",
+                    overview: "",
+                    popularity: 1,
+                    poster_path: "/zVMyvNowgbsBAL6O6esWfRpAcOb.jpg",
+                    release_date: "01-01-2024",
+                    title: "",
+                    video: false,
+                    vote_average: 10.0,
+                    vote_count: 10
+                )
+            ]
+        ))
     }
 }

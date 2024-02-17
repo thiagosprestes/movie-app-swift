@@ -8,28 +8,73 @@
 import SwiftUI
 
 struct CarouselView: View {
-    @State var url = URL(string: "https://img.r7.com/images/deadpool-no-filme-deadpool-wolverine-14022024073129447?dimensions=771x420")
-    
-    @EnvironmentObject var viewModel: HomeViewModel
+    @ObservedObject var viewModel: HomeViewModel
     
     var body: some View {
         TabView {
-            ForEach((0..<3), id: \.self) { index in
+            ForEach(viewModel.popularMovies, id: \.id) { item in
                 AsyncImage(
-                    url: url,
+                    url: URL(string: "https://image.tmdb.org/t/p/original\(item.backdrop_path)"),
                     content: { image in
                         image.image?.resizable().aspectRatio(contentMode: .fill).cornerRadius(10)
                     }
-                ).frame(width: 320, height: 192)
+                )
+                .overlay {
+                    LinearGradient(
+                        colors: [.clear, .black],
+                        startPoint: .center,
+                        endPoint: .bottom
+                    ).cornerRadius(10)
+                    Text(item.title).customTextStyle(size: 20, type: .medium)
+                        .foregroundColor(Color("white"))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+                        .padding(20)
+                }
+                .frame(height: 192)
+                .padding([.leading, .trailing], 16)
             }
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
-        .frame(height: 192)
+        .frame(height: 280)
     }
 }
 
 struct CarouselViewPreview: PreviewProvider {
     static var previews: some View {
-        CarouselView().environmentObject(HomeViewModel())
+        CarouselView(viewModel: HomeViewModel(
+            provider: nil,
+            popularMovies: [
+                Movie(
+                    adult: false,
+                    backdrop_path: "/criPrxkTggCra1jch49jsiSeXo1.jpg",
+                    genre_ids: [10], id: 18272,
+                    original_language: "en-US",
+                    original_title: "The marvels",
+                    overview: "",
+                    popularity: 1,
+                    poster_path: "/criPrxkTggCra1jch49jsiSeXo1.jpg",
+                    release_date: "01-01-2024",
+                    title: "As Marvels",
+                    video: false,
+                    vote_average: 10.0,
+                    vote_count: 10
+                ),
+                Movie(
+                    adult: false,
+                    backdrop_path: "/criPrxkTggCra1jch49jsiSeXo1.jpg",
+                    genre_ids: [10], id: 18272,
+                    original_language: "en-US",
+                    original_title: "The marvels",
+                    overview: "",
+                    popularity: 1,
+                    poster_path: "/criPrxkTggCra1jch49jsiSeXo1.jpg",
+                    release_date: "01-01-2024",
+                    title: "As Marvels",
+                    video: false,
+                    vote_average: 10.0,
+                    vote_count: 10
+                )
+            ]
+        ))
     }
 }

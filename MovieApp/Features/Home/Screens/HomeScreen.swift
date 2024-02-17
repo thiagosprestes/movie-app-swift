@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeScreen: View {
-    @State var url = URL(string: "https://www.laranjacast.com.br/wp-content/uploads/2023/12/madame-web-poster-1-2-1024x1280.webp")
+    @StateObject var viewModel = HomeViewModel()
     
     var body: some View {
         VStack {
@@ -24,9 +24,9 @@ struct HomeScreen: View {
             .frame(maxWidth: .infinity)
             .padding([.leading, .trailing], 16)
             .padding(.bottom, 26)
-            CarouselView()
-            GenresView()
-            MoviesListView()
+            CarouselView(viewModel: viewModel)
+            GenresView(viewModel: viewModel)
+            MoviesListView(viewModel: viewModel)
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -36,6 +36,58 @@ struct HomeScreen: View {
 
 struct HomeScreenPreview: PreviewProvider {
     static var previews: some View {
-        HomeScreen().environmentObject(HomeViewModel())
+        HomeScreen(viewModel: HomeViewModel(
+            provider: nil,
+            popularMovies: [
+                Movie(
+                    adult: false,
+                    backdrop_path: "/criPrxkTggCra1jch49jsiSeXo1.jpg",
+                    genre_ids: [10], id: 18272,
+                    original_language: "en-US",
+                    original_title: "The marvels",
+                    overview: "",
+                    popularity: 1,
+                    poster_path: "/criPrxkTggCra1jch49jsiSeXo1.jpg",
+                    release_date: "01-01-2024",
+                    title: "",
+                    video: false,
+                    vote_average: 10.0,
+                    vote_count: 10
+                ),
+                Movie(
+                    adult: false,
+                    backdrop_path: "/criPrxkTggCra1jch49jsiSeXo1.jpg",
+                    genre_ids: [10], id: 18272,
+                    original_language: "en-US",
+                    original_title: "The marvels",
+                    overview: "",
+                    popularity: 1,
+                    poster_path: "/criPrxkTggCra1jch49jsiSeXo1.jpg",
+                    release_date: "01-01-2024",
+                    title: "",
+                    video: false,
+                    vote_average: 10.0,
+                    vote_count: 10
+                )
+            ],
+            genres: [Genre(id: 1, name: "Action")],
+            newReleases: [
+                Movie(
+                    adult: false,
+                    backdrop_path: "/zVMyvNowgbsBAL6O6esWfRpAcOb.jpg",
+                    genre_ids: [10], id: 18272,
+                    original_language: "en-US",
+                    original_title: "The marvels",
+                    overview: "",
+                    popularity: 1,
+                    poster_path: "/zVMyvNowgbsBAL6O6esWfRpAcOb.jpg",
+                    release_date: "01-01-2024",
+                    title: "",
+                    video: false,
+                    vote_average: 10.0,
+                    vote_count: 10
+                )
+            ]
+        ))
     }
 }
