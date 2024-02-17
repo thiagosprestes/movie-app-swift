@@ -33,7 +33,6 @@ struct GenresView: View {
             }.scrollIndicators(.hidden)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.bottom, 24)
     }
 }
 

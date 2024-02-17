@@ -7,21 +7,27 @@
 
 import SwiftUI
 
+enum MovieListType {
+    case newReleases, upcoming
+}
+
 struct MoviesListView: View {
+    var type: MovieListType
+    
     @ObservedObject var viewModel: HomeViewModel
     
     var body: some View {
         VStack {
             HStack {
-                Text("New Releases").customTextStyle(size: 18, type: .medium).foregroundColor(Color("white"))
+                Text(type == MovieListType.newReleases ? "Novos lançamentos" : "Os favoritos do público").customTextStyle(size: 18, type: .medium).foregroundColor(Color("white"))
                 Spacer()
-                Text("View All").customTextStyle(size: 12, type: .bold).foregroundColor(Color("red"))
+                Text("Ver mais").customTextStyle(size: 12, type: .bold).foregroundColor(Color("red"))
             }
             .frame(maxWidth: .infinity, alignment: .bottom)
             .padding([.leading, .trailing], 16)
             ScrollView(.horizontal) {
                 HStack {
-                    ForEach(viewModel.newReleases, id: \.id) { item in
+                    ForEach(type == MovieListType.newReleases ? viewModel.newReleases : viewModel.topRated, id: \.id) { item in
                         AsyncImage(
                             url: URL(string: "https://image.tmdb.org/t/p/original\(item.poster_path)"),
                             content: { image in
@@ -35,13 +41,15 @@ struct MoviesListView: View {
                     }
                 }.padding([.leading, .trailing], 16)
             }.scrollIndicators(.hidden)
-        }
+        }.padding([.top,.bottom], 24)
     }
 }
 
 struct MoviesListViewPreview: PreviewProvider {
     static var previews: some View {
-        MoviesListView(viewModel: HomeViewModel(
+        MoviesListView(
+            type: MovieListType.newReleases,
+            viewModel: HomeViewModel(
             provider: nil,
             newReleases: [
                 Movie(

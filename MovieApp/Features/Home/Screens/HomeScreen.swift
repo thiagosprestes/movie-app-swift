@@ -11,7 +11,7 @@ struct HomeScreen: View {
     @StateObject var viewModel = HomeViewModel()
     
     var body: some View {
-        VStack {
+        ScrollView {
             HStack {
                 Spacer()
                 Image(systemName: "magnifyingglass")
@@ -26,8 +26,8 @@ struct HomeScreen: View {
             .padding(.bottom, 26)
             CarouselView(viewModel: viewModel)
             GenresView(viewModel: viewModel)
-            MoviesListView(viewModel: viewModel)
-            Spacer()
+            MoviesListView(type: MovieListType.newReleases, viewModel: viewModel)
+            MoviesListView(type: MovieListType.upcoming, viewModel: viewModel)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color("background"))

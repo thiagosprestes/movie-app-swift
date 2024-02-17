@@ -9,7 +9,7 @@ import SwiftUI
 
 class HomeViewModel: ObservableObject {
     private var provider: NetworkManager?
-
+    
     @State var selectedGenre = "Ação"
     
     enum ScreenState {
@@ -24,12 +24,20 @@ class HomeViewModel: ObservableObject {
     @Published var popularMovies: [Movie]
     @Published var genres: [Genre]
     @Published var newReleases: [Movie]
+    @Published var topRated: [Movie]
     
-    init(provider: NetworkManager? = NetworkManager(), popularMovies: [Movie] = [], genres: [Genre] = [], newReleases: [Movie] = []) {
+    init(
+        provider: NetworkManager? = NetworkManager(),
+        popularMovies: [Movie] = [],
+        genres: [Genre] = [],
+        newReleases: [Movie] = [],
+        topRated: [Movie] = []
+    ) {
         self.provider = provider
         self.popularMovies = popularMovies
         self.genres = genres
         self.newReleases = newReleases
+        self.topRated = topRated
         
         Task {
             await onGetData()
@@ -43,11 +51,13 @@ class HomeViewModel: ObservableObject {
             let popularMoviesResponse = try await provider?.fetch(PopularMoviesResponse.self, endpoint: "/movie/popular")
             let genresResponse = try await provider?.fetch(GenresResponse.self, endpoint: "/genre/movie/list")
             let newReleasesResponse = try await provider?.fetch(NewReleasesResponse.self, endpoint: "/movie/now_playing")
+            let topRatedResponse = try await provider?.fetch(NewReleasesResponse.self, endpoint: "/movie/top_rated")
             
             if(provider != nil) {
                 self.popularMovies = popularMoviesResponse?.results ?? []
                 self.genres = genresResponse?.genres ?? []
                 self.newReleases = newReleasesResponse?.results ?? []
+                self.topRated = topRatedResponse?.results ?? []
             }
             
             self.state = .success
